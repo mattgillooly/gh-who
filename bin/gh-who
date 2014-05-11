@@ -1,8 +1,5 @@
 #!/usr/bin/env ruby
 
-# Silence Ctrl-C's
-trap('INT'){ exit 1 }
-
 require 'optparse'
 require 'gh/who'
 
@@ -23,11 +20,6 @@ Usage: #{executable_name} ORGANIZATION
   opts.on("--login", "Authenticate #{executable_name} on this computer.") do
     Gh::Who.login!
     exit
-  end
-
-  opts.on("-t", "--type [EXTENSION]", "Sets the file extension and syntax type.") do |extension|
-    filenames << "foo.#{extension}"
-    options[:filename] = "foo.#{extension}"
   end
 
   opts.on_tail("-h","--help", "Show this message.") do
