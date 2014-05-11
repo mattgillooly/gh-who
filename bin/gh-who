@@ -1,0 +1,45 @@
+#!/usr/bin/env ruby
+
+# Silence Ctrl-C's
+trap('INT'){ exit 1 }
+
+require 'optparse'
+require 'gh/who'
+
+OptionParser.new do |opts|
+  executable_name = File.split($0)[1]
+  opts.banner = <<-EOS
+#{executable_name} (v#{Gh::Who::VERSION}) lets you list users in a Github organization.
+
+If you wish to list users from a private organization that you have permission
+to access with your GitHub account, first use `#{executable_name} --login` to obtain an
+Oauth2 access token. This is stored and used by #{executable_name} in the future.
+
+Usage: #{executable_name} ORGANIZATION
+       #{executable_name} --login
+
+  EOS
+
+  opts.on("--login", "Authenticate #{executable_name} on this computer.") do
+    Gh::Who.login!
+    exit
+  end
+
+  opts.on("-t", "--type [EXTENSION]", "Sets the file extension and syntax type.") do |extension|
+    filenames << "foo.#{extension}"
+    options[:filename] = "foo.#{extension}"
+  end
+
+  opts.on_tail("-h","--help", "Show this message.") do
+    puts opts
+    exit
+  end
+
+  opts.on_tail("-v", "--version", "Print the version.") do
+    puts "gist v#{Gh::Who::VERSION}"
+    exit
+  end
+
+end.parse!
+
+puts Gh::Who.members(ARGV.last) unless ARGV.empty?
