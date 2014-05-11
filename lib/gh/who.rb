@@ -3,6 +3,12 @@ require "gh/who/version"
 require 'gist'
 require 'github_api'
 
+# Hide warning: "Faraday::Builder is now Faraday::RackBuilder."
+# TODO: remove this after next github_api gem release (>0.11.3)
+module Faraday
+  Builder = RackBuilder
+end
+
 module Gh
   module Who
     extend self
